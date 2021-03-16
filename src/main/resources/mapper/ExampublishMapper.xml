@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.howei.mapper.ExampublishMapper">
+
+    <resultMap id="authMap" type="com.howei.pojo.QuestionBank">
+        <result column="id" property="id"></result>
+        <result column="CourseId" property="courseId"></result>
+        <result column="ChapterID" property="phapterId"></result>
+        <result column="PoisionA" property="poisionA"></result>
+        <result column="PoisionB1" property="poisionB1"></result>
+        <result column="startdate" property="startdate"></result>
+        <result column="enddate" property="enddate"></result>
+        <result column="state" property="state"></result>
+        <result column="week" property="week"></result>
+        <result column="examTime" property="examTime"></result>
+    </resultMap>
+
+
+    <select id="findExampublish" resultType="com.howei.pojo.Exampublish">
+    	select * from exampublish order by state desc
+    </select>
+
+    <insert id="addExampublish" parameterType="com.howei.pojo.Exampublish">
+		insert ignore into exampublish (CourseID,ChapterID,PoisionA,PoisionB1,startdate,enddate,state,week,examTime)
+         value (#{courseId},#{chapterId},#{poisionA},#{poisionB1},#{startdate},#{enddate},2,#{week},#{examTime})
+	</insert>
+
+    <delete id="deleteExampublish">
+        delete  from exampublish where id=#{id}
+    </delete>
+
+
+    <update id="updateExampublish">
+        update exampublish set CourseID=#{courseId},ChapterID=#{chapterId},PoisionA=#{poisionA},
+        PoisionB1=#{poisionB1},enddate=#{enddate},startdate=#{startdate},week=#{week},examTime=#{examTime}
+        where id=#{id}
+    </update>
+
+
+    <select id="findExamHis" resultType="com.howei.pojo.Examination">
+    	SELECT b.userName,b.cycle,b.week,b.times,d.userNumber 
+    	FROM ( 
+    		select distinct a.userName,a.cycle,a.week,a.times 
+    		from examinationRecord a where a.userName=#{param1} ORDER BY a.cycle DESC ,a.week DESC,a.times DESC )b 
+    	JOIN users d ON b.userName=d.userName
+    </select>
+    
+    <select id="getExamTimes" resultType="com.howei.pojo.Examination">
+        select a.userName,a.cycle,a.week,IFNULL(a.times,0)times,a.questionId from examinationRecord a where a.userName=#{param1} and a.cycle=#{param2} and a.week=#{param3}
+    </select>
+    <select id="getWeek" resultType="com.howei.pojo.Examination">
+        select a.week from exampublish a where a.state=2
+    </select>
+    
+   	<insert id="insertExamHis">
+        insert ignore into examinationRecord (userName,cycle,week,times,questionId) values (#{examination.userName},#{examination.cycle},#{examination.week},#{examination.times},#{examination.questionId})
+    </insert>
+    
+    <insert id="addAchievement">
+		insert ignore AchievementRecord(userName,week,result1,cycle,times)
+		value(#{userName},#{week},#{TestScore},#{cycle},1)
+	</insert>
+
+	<update id="updAchievement">
+		update AchievementRecord set 
+		<if test="times==1">
+			result2 = #{TestScore}, times = #{times}+1
+		</if>
+		<if test="times==2">
+			result3 = #{TestScore}, times = #{times}+1
+		</if>
+		<if test="times==3">
+			result4 = #{TestScore}, times = #{times}+1
+		</if>
+		where id = #{id}
+	</update>
+    
+    
+	<select id="findAchievement" resultType="com.howei.pojo.Achievement">
+		select id,UPPER(userName) userName,week,result1,result2,result3,result4,cycle,times 
+		from AchievementRecord where UPPER(userName) = UPPER(#{userName}) and week = #{week} and cycle = #{cycle}
+	</select>
+	
+   <update id="updatescore"  parameterType="java.lang.String">
+       update learningsituation set TestScore=#{param1} Where UPPER(UserName)=UPPER(#{param2})
+    </update>
+    
+	<select id="findbyUsr" resultType="com.howei.pojo.Situation" parameterType="java.lang.String">
+        select ActualPeriod, ActualCredit,TestScore from learningsituation where UPPER(Username)=UPPER(#{param1})
+    </select>
+
+</mapper>

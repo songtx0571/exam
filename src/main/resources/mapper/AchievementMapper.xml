@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.howei.mapper.AchievementMapper" >
+	
+	<select id="findAchievement" resultType="com.howei.pojo.Achievement">
+		select id,UPPER(userName) userName,week,result1,result2,result3,result4,cycle,times 
+		from AchievementRecord where UPPER(userName) = UPPER(#{userName}) and week = #{week} and cycle = #{cycle}
+	</select>
+	
+	<select id="findAchievementsByUserName" resultType="com.howei.pojo.Achievement">
+		select id,UPPER(userName) userName,week,result1,result2,result3,result4,cycle,times 
+		from AchievementRecord where UPPER(userName) = UPPER(#{userName}) and cycle = #{cycle}
+	</select>
+	
+	<select id="findAchievementsByUserName1" resultType="com.howei.pojo.Achievement">
+		SELECT a.id,UPPER(a.userName) userName ,a.week,a.result1,a.result2,a.result3,a.result4,a.cycle,a.times 
+		FROM AchievementRecord a
+		JOIN employee b ON UPPER(a.userName) = UPPER(b.userName)
+		WHERE b.id = #{behavior.employeeId} AND a.cycle = #{behavior.cycle}
+	</select>
+	
+	
+	<insert id="addAchievement">
+		insert ignore AchievementRecord(userName,week,result1,cycle,times)
+		value(#{userName},#{week},#{TestScore},#{cycle},1)
+	</insert>
+
+	<update id="updAchievement">
+		update AchievementRecord set 
+		<if test="times==1">
+			result2 = #{TestScore}, times = #{times}+1
+		</if>
+		<if test="times==2">
+			result3 = #{TestScore}, times = #{times}+1
+		</if>
+		<if test="times==3">
+			result4 = #{TestScore}, times = #{times}+1
+		</if>
+		where id = #{id}
+	</update>
+	
+	<select id='findAchievementsByCycle' resultType="com.howei.pojo.Achievement">
+		select id,UPPER(userName) userName,week,result1,result2,result3,result4,cycle,times 
+		from AchievementRecord where cycle = #{cycle}
+	</select>
+	
+	<select id='findAchievementRecords' resultType="com.howei.pojo.AchievementRecord">
+		SELECT userNumber userName,`userName` `name` FROM users
+		<where>
+			<if test="userNumber!=null and userNumber!=''">
+				userNumber=#{userNumber}
+			</if>
+		</where>
+		ORDER BY UserName 	
+	</select>
+
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.howei.mapper.Behaviormapper">
+    <select id="findAll" resultType="com.howei.pojo.Behavior">
+        select * from behavior where employeeId=#{behavior.employeeId} and cycle=#{behavior.cycle}
+    </select>
+
+    <select id="findById" resultType="com.howei.pojo.Behavior">
+        select * from behavior where id=#{param1}
+    </select>
+
+    <select id="selectAllCycle" resultType="java.lang.String">
+        select DISTINCT cycle from behavior where cycle not in (select cycle  from performance)
+          union all
+        select DISTINCT cycle  from performance order by cycle desc
+    </select>
+
+    <select id="selectBeCycle" resultType="java.lang.String">
+        SELECT DISTINCT cycle FROM behavior where employeeId=#{param1} ORDER BY cycle desc
+    </select>
+
+    <delete id="delete">
+        delete from behavior where id=#{obj.Id}
+    </delete>
+
+    <insert id="insert">
+        insert ignore into behavior (week1,week2,week3,week4,cycle,employeeId,period,tiaoxiu,qingjia,kuanggong,chidao,lunxiu,jiaban,kaoqin,zhiban,chuchai,remark,sum)
+        value (#{obj.week1},#{obj.week2},#{obj.week3},#{obj.week4},#{obj.cycle},#{obj.employeeId},#{obj.period},#{obj.tiaoxiu},#{obj.qingjia},#{obj.kuanggong}
+              ,#{obj.chidao},#{obj.lunxiu},#{obj.jiaban},#{obj.kaoqin},#{obj.zhiban},#{obj.chuchai},#{obj.remark},#{obj.sum})
+    </insert>
+
+    <update id="update">
+        update behavior
+        <set>
+            week1=#{obj.week1},week2=#{obj.week2},week3=#{obj.week3},
+            week4=#{obj.week4},cycle=#{obj.cycle},period=#{obj.period},
+            tiaoxiu=#{obj.tiaoxiu},qingjia=#{obj.qingjia},kuanggong=#{obj.kuanggong},
+            chidao=#{obj.chidao},lunxiu=#{obj.lunxiu},jiaban=#{obj.jiaban},kaoqin=#{obj.kaoqin},zhiban=#{obj.zhiban},
+            chuchai=#{obj.chuchai},remark=#{obj.remark},sum=#{obj.sum},cycle2=concat(cycle,'-01')
+        </set>
+        where id=#{obj.id}
+    </update>
+
+    <update id="updateSalary">
+        replace into salary2(UserName,cycle,phoneAllowance,yanglao,shiye,yiliao,gongjijin,zhuanxiang,qitakouchu) values(#{obj.userName},#{obj.cycle},#{obj.phoneAllowance},#{obj.yanglao},#{obj.shiye},#{obj.yiliao},#{obj.gongjijin},#{obj.zhuanxiang},#{obj.qitakouchu})
+    </update>
+
+    <update id="updateSalaryCopy">
+        update employee
+        <set>
+            phoneAllowance=#{obj.phoneAllowance},yanglao=#{obj.yanglao},shiye=#{obj.shiye},yiliao=#{obj.yiliao},gongjijin=#{obj.gongjijin},zhuanxiang=#{obj.zhuanxiang},qitakouchu=#{obj.qitakouchu}
+        </set>
+        where
+        UserName=#{obj.userName}
+    </update>
+
+
+
+    <update id="updateCycle">
+        update behavior
+        <set>
+            cycle=#{behavior.cycle},cycle2=concat(cycle,'-01')
+        </set>
+        where id=#{behavior.id}
+    </update>
+
+	<select id='getAssessment' resultType="com.howei.pojo.Assessment">
+		SELECT b.id,b.userName,b.name,d.departmentName department,b.laowupaiqian,b.phoneAllowance,a.jiaban,a.zhiban,a.kaoqin,a.sum score1,c.score score2,b.basicwages,b.meritpay
+		FROM employee b
+		LEFT JOIN (SELECT employeeId,jiaban,zhiban,kaoqin,`sum` FROM behavior WHERE cycle = #{cycle}) a ON a.employeeId = b.id
+		LEFT JOIN (SELECT employeeId,SUM(score) score FROM performance WHERE cycle = #{cycle} GROUP BY employeeId ) c ON c.employeeId = b.id
+		LEFT JOIN department d ON b.department = d.id WHERE d.type != 0
+		ORDER BY b.department,laowupaiqian,userName
+	</select>
+
+    <select id='getAssessmentBy' resultType="com.howei.pojo.Assessment">
+		SELECT b.id,b.userName,b.name,d.departmentName department,b.laowupaiqian,b.phoneAllowance,a.jiaban,a.zhiban,a.kaoqin,a.sum score1,c.score score2,b.basicwages,b.meritpay
+		FROM employee b
+		LEFT JOIN (SELECT employeeId,jiaban,zhiban,kaoqin,`sum` FROM behavior WHERE cycle = #{cycle}) a ON a.employeeId = b.id
+		LEFT JOIN (SELECT employeeId,SUM(score) score FROM performance WHERE cycle = #{cycle} GROUP BY employeeId ) c ON c.employeeId = b.id
+		right join (SELECT a.id,a.UserName FROM employee a WHERE a.manager=#{manager}) f on b.id=f.id
+		LEFT JOIN department d ON b.department = d.id WHERE d.type != 0
+		ORDER BY b.department,laowupaiqian,userName
+	</select>
+
+
+	<select id='getAssessmentByUserName' resultType="com.howei.pojo.Assessment">
+		SELECT b.id,b.userName,b.name,b.department,b.laowupaiqian,b.phoneAllowance,a.jiaban,a.zhiban,a.kaoqin,a.sum score1,c.score score2 FROM employee b
+		LEFT JOIN (SELECT employeeId,jiaban,zhiban,kaoqin,`sum` FROM behavior WHERE cycle = #{cycle}) a ON a.employeeId = b.id
+		LEFT JOIN (SELECT employeeId,SUM(score) score FROM performance WHERE cycle = #{cycle} GROUP BY employeeId ) c ON c.employeeId = b.id
+		WHERE userName = #{userName}
+	</select>
+	
+	<select id='getAssessmentByEmployeeId' resultType="com.howei.pojo.Assessment">
+		SELECT b.id,b.userName,b.name,b.department,b.laowupaiqian,b.phoneAllowance,a.jiaban,a.zhiban,a.kaoqin,a.sum score1,c.score score2 FROM employee b
+		LEFT JOIN (SELECT employeeId,jiaban,zhiban,kaoqin,`sum` FROM behavior WHERE cycle = #{cycle}) a ON a.employeeId = b.id
+		LEFT JOIN (SELECT employeeId,SUM(score) score FROM performance WHERE cycle = #{cycle} GROUP BY employeeId ) c ON c.employeeId = b.id
+		WHERE b.id = #{employeeId}
+	</select>
+    <!--根据用户id月份查询分数为空的记录-->
+    <select id="selscore">
+        select * from behavior b where b.cycle=${param1} and b.${param2}=null
+    </select>
+
+    <update id="updateWeek">
+        update behavior
+        <set>
+            week1=#{behavior.week1},week2=#{behavior.week2},week3=#{behavior.week3},week4=#{behavior.week4}
+        </set>
+        where id=#{behavior.id}
+    </update>
+</mapper>

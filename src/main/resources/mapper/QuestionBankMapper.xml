@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.howei.mapper.QuestionBankMapper" >
+
+    <resultMap id="authMap" type="com.howei.pojo.QuestionBank">
+        <result column="CourseId" property="courseId"></result>
+        <result column="ChapterID" property="chapterId"></result>
+        <result column="PoisionA" property="poisionA"></result>
+        <result column="PoisionB1" property="poisionB1"></result>
+		<result column="PoisionB2" property="poisionB2"></result>
+		<result column="PoisionB3" property="poisionB3"></result>
+		<result column="Question" property="question"></result>
+		<result column="Answer" property="answer"></result>
+		<result column="OptionA" property="optionA"></result>
+		<result column="OptionB" property="optionB"></result>
+		<result column="OptionC" property="optionC"></result>
+		<result column="OptionD" property="optionD"></result>
+		<result column="Remarks" property="remarks"></result>
+		<result column="QuestionTime" property="questionTime"></result>
+		<result column="Type" property="type"></result>
+		<result column="QuestionID" property="questionId"></result>
+    </resultMap>
+	
+	<select id="findRand" resultType="com.howei.pojo.QuestionBank" parameterType="java.lang.String">
+    	select Question,Answer from questionbank where CourseID=${courseId} and ChapterID=${chapterId}
+    </select>
+    
+    <insert id="insert">
+        insert ignore into questionbank (CourseID,ChapterID,PoisionA,PoisionB1,PoisionB2,PoisionB3,Question,
+        Answer,OptionA,OptionB,OptionC,OptionD,Remarks,QuestionTime,Type) value
+        (#{courseId},#{chapterId},#{poisionA},#{poisionB1},#{poisionB2},
+        #{poisionB3},#{question},#{answer},#{optionA},#{optionB},
+        #{optionC},#{optionD},#{remarks},#{questionTime},#{type})
+    </insert>
+
+  
+    <select id="findPoisionB1" resultType="java.lang.String">
+        select DISTINCT PoisionB1 from questionbank where PoisionA=#{param1}
+    </select>
+
+    <select id="findPoisionA" resultType="java.lang.String">
+        select DISTINCT PoisionA from questionbank
+    </select>
+
+    <select id="findquestionpublish" resultType="com.howei.pojo.QuestionBank" parameterType="com.howei.pojo.QuestionBank">
+        select * from questionbank where
+        CourseID=#{courseId} and
+        ChapterID=#{chapterId} and
+        PoisionA=#{poisionA} and
+        PoisionB1=#{poisionB1}
+		order by rand() limit 20
+    </select>
+
+    <select id="findExercise" resultType="com.howei.pojo.QuestionBank">
+        select * from questionbank
+        where 1=1
+        <if test="param1!=null and param1!=''">
+            and PoisionA=#{param1}
+        </if>
+        <if test="param2!=null and param2!=''">
+            and PoisionB1=#{param2}
+        </if>
+    </select>
+  
+    <delete id="delete" parameterType="java.lang.String">
+        delete  from questionbank where QuestionID=#{questionID}
+    </delete>
+
+    <update id="update">
+        update questionbank set CourseID=#{courseId},ChapterID=#{chapterId},PoisionA=#{poisionA},PoisionB1=#{poisionB1},
+        PoisionB2=#{poisionB2},PoisionB3=#{poisionB3},Question=#{question},QuestionTime=#{questionTime},Type=#{type},
+        Answer=#{answer},OptionA=#{optionA},OptionB=#{optionB},OptionC=#{optionC},OptionD=#{optionD},Remarks=#{remarks}
+        where QuestionID=#{questionId}
+    </update>
+ 	
+  	<select id="findquestiontips" resultType="com.howei.pojo.QuestionBank">
+        select * from exampublish where state= 1
+    </select>
+	
+	<select id="showQ" resultType="com.howei.pojo.QuestionBank" parameterType="java.util.Map">
+      	select * from questionbank where PoisionA=#{PoisionA} and PoisionB1=#{PoisionB1} and ChapterID=#{ChapterID}
+    </select>
+	
+	<select id="findbypoision" resultType="com.howei.pojo.Poision" parameterType="java.lang.String">
+        select PoisionB from Poision where PoisionA=#{param1}
+    </select>
+    
+   	<select id="showByExam" resultType="com.howei.pojo.QuestionBank" parameterType="java.util.Map">
+      	select * from questionbank d join (SELECT DISTINCT questionId FROM examinationRecord a WHERE a.userName=#{param1} AND a.cycle=#{param2} AND a.week=#{param3} AND a.times=#{param4}) b on d.QuestionID=b.questionId
+    </select>
+    
+   	<select id="findAllfrompublish" resultType="com.howei.pojo.QuestionBank">
+        select * from exampublish where id=#{param1}
+    </select>
+    
+    
+    <select id="selectemployeeId" resultType="java.lang.Integer">
+        select id from employee where id not in(
+    	select employeeId from behavior where cycle=#{param1})
+    </select>
+    
+    <insert id="insertcycle">
+      insert ignore into behavior (cycle,employeeId) values (#{param1},#{param2});
+   	</insert>
+    
+    
+  	<update id="insertscore">
+        update behavior,learningsituation set behavior.${param1}=learningsituation.TestScore
+        where behavior.employeeId=(select id from employee where employee.userNumber=learningsituation.UserName)
+        and behavior.cycle=#{param2}
+    </update>
+
+    <update id="startexam">
+        update exampublish set state= 1 where id=#{param1}
+    </update>
+
+    <update id="finishexam">
+        update exampublish set state= 0 where id=#{param1}
+    </update>
+    
+  	<select id="countstart" resultType="java.lang.Integer">
+    	select count(id) from exampublish where state= 1
+    </select>
+    
+    <update id="clearScore">
+        update learningsituation set TestScore='0',times='0'
+    </update>
+    
+	<select id="findAllByState" resultType="com.howei.pojo.QuestionBank">
+		SELECT * FROM exampublish WHERE state = 1
+	</select>
+</mapper>
