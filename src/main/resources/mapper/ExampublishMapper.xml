@@ -17,7 +17,7 @@
 
 
     <select id="findExampublish" resultType="com.howei.pojo.Exampublish">
-    	select * from exampublish order by state desc
+    	select * from exampublish order by state desc,id desc
     </select>
 
     <insert id="addExampublish" parameterType="com.howei.pojo.Exampublish">

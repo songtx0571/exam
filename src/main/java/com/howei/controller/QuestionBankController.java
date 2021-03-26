@@ -141,12 +141,25 @@ public class QuestionBankController {
 		Date d = new Date();
 		SimpleDateFormat sim = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = sim.parse(sim.format(d));
+
 		for (int i = 0; i < questiontips.size(); i++) {
-			if ((date.before(sim.parse(questiontips.get(i).getEnddate()))
-					| date.equals(sim.parse(questiontips.get(i).getEnddate())))
-					&& (date.after(sim.parse(questiontips.get(i).getStartdate())))
-							| date.equals(sim.parse(questiontips.get(i).getStartdate()))) {
+			String enddate = questiontips.get(i).getEnddate();
+			String startdate = questiontips.get(i).getStartdate();
+
+			System.out.println("getStartdate::"+startdate);
+			System.out.println("enddate::"+enddate);
+			System.out.println("date::"+date);
+
+
+			boolean beforeEnd = date.before(sim.parse(questiontips.get(i).getEnddate()));
+			boolean equalsEnd = date.equals(sim.parse(questiontips.get(i).getEnddate()));
+			boolean afterStart = date.after(sim.parse(questiontips.get(i).getStartdate()));
+			boolean equalsStart = date.equals(sim.parse(questiontips.get(i).getStartdate()));
+			System.out.println( beforeEnd+" "+ equalsEnd+" "+afterStart+" "+equalsStart);
+			if ((beforeEnd | equalsEnd  ) && (  afterStart  |  equalsStart ) ) {
 				List<QuestionBank> QuestionList = questionBankSerivce.findquestionpublish(questiontips.get(i));
+
+				System.out.println("QuestionList::"+QuestionList);
 				return QuestionList;
 			}
 		}
@@ -168,7 +181,11 @@ public class QuestionBankController {
 	@RequestMapping("/getExamTime")
 	public QuestionBank getExamTime() throws ParseException {
 		List<QuestionBank> questiontips = questionBankSerivce.findquestiontips();
-		return questiontips.get(0);
+		if(questiontips.size()>0){
+
+			return questiontips.get(0);
+		}
+		return null;
 	}
 
 	@RequestMapping("/GetPoisionB")

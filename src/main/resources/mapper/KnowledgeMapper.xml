@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.howei.mapper.KnowledgeMapper">
+
+    <resultMap id="baseMap" type="com.howei.pojo.Knowledge">
+        <id property="id" column="id"></id>
+        <result column="employee_id" property="employeeId"></result>
+        <result column="employee_name" property="employeeName"></result>
+        <result column="title" property="title"></result>
+        <result column="keyword" property="keyword"></result>
+        <result column="content" property="content"></result>
+        <result column="title" property="title"></result>
+        <result column="remark" property="remark"></result>
+        <result column="status" property="status"></result>
+        <result column="type" property="type"></result>
+        <result column="heat" property="heat"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="updata_time" property="updataTime"></result>
+        <collection property="checkedEmployee" resultMap="employeeMap"></collection>
+    </resultMap>
+    <resultMap id="employeeMap" type="map">
+        <result column="kcr_id" property="kcrId"></result>
+        <result column="check_employee_id" property="checkEmployeeId"></result>
+        <result column="check_employee_name" property="checkEmployeeName"></result>
+    </resultMap>
+    <insert id="insert">
+        insert into knowledge(employee_id,employee_name,title,keyword,content,remark,create_time,update_time)
+        values (#{record.employeeId},#{record.employeeName},#{record.title},#{record.keyword},#{record.content},#{record.remark},#{record.createTime},#{record.createTime})
+    </insert>
+    <insert id="insertCheckEmployee">
+        insert into
+            knowledge_check_record(knowledge_id,employee_id,employee_name,create_time)
+        values
+            (#{map.knowledgeId},#{map.employeeId},#{map.employeeName},#{map.createTime})
+    </insert>
+    <update id="updateById">
+        update knowledge
+        set
+        update_time=#{record.updateTime}
+        <if test="record.title!=null">
+            ,title=#{record.title}
+        </if>
+        <if test="record.keyword!=null">
+            , keyword=#{record.keyword}
+        </if>
+        <if test="record.content!=null">
+            ,content=#{record.content}
+        </if>
+        <if test="record.remark!=null">
+            ,remark=#{record.remark}
+        </if>
+        <if test="record.type!=null">
+            ,status=#{record.status}
+        </if>
+        <if test="record.type!=null">
+            ,type=#{record.type}
+        </if>
+        <if test="record.heat!=null">
+            ,heat=#{record.heat}
+        </if>
+        where
+        id=#{record.id}
+
+
+    </update>
+    <delete id="deleteById">
+        DELETE
+            k,kcr
+        FROM
+            knowledge k
+        LEFT JOIN knowledge_check_record kcr ON kcr.knowledge_id = k.id
+        WHERE
+            k.id = #{id}
+    </delete>
+
+    <select id="getByEmployeeId" resultMap="baseMap">
+    SELECT
+    DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
+        k.*,
+         kcr.id kcr_id,
+        kcr.employee_id check_employee_id,
+        kcr.employee_name check_employee_name
+    FROM
+        knowledge k
+    JOIN employee e ON k.employee_id = e.id
+    LEFT JOIN knowledge_check_record kcr ON kcr.knowledge_id = k.id
+    WHERE
+        k.employee_id = #{employeeId}
+    </select>
+    <select id="getById" resultMap="baseMap">
+    SELECT
+    DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
+        k.*,
+         kcr.id kcr_id,
+        kcr.employee_id check_employee_id,
+        kcr.employee_name check_employee_name
+    FROM
+        knowledge k
+    JOIN employee e ON k.employee_id = e.id
+    LEFT JOIN knowledge_check_record kcr ON kcr.knowledge_id = k.id
+    WHERE
+        k.id = #{id}
+    </select>
+    <select id="getByMap" resultMap="baseMap">
+         SELECT
+        DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
+        k.*,
+         kcr.id kcr_id,
+        kcr.employee_id check_employee_id,
+        kcr.employee_name check_employee_name
+    FROM
+        knowledge k
+    JOIN employee e ON k.employee_id = e.id
+    LEFT JOIN knowledge_check_record kcr ON kcr.knowledge_id = k.id
+    WHERE
+     k.type =#{map.type}
+     <if test="map.employeeId!=null">
+         and  k.employee_id = #{ map.employeeId}
+     </if>
+
+    order by  k.heat desc
+    </select>
+    <select id="getChechEmployeeByMap" resultType="java.util.Map">
+        select  *
+        from knowledge_check_record
+        where knowledge_id=#{map.knowledgeId}
+        and employee_id=#{map.employeeId}
+
+    </select>
+
+
+</mapper>

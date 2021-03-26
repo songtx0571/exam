@@ -1,0 +1,59 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "PingFang SC","Lantinghei SC","Microsoft YaHei","HanHei SC","Helvetica Neue","Open Sans",Arial,"Hiragino Sans GB","微软雅黑",STHeiti,"WenQuanYi Micro Hei",SimSun,sans-serif;
+}
+.warp {
+    width: 100%;
+    height: 100%;
+}
+.top{
+    width: 100%;
+    height: 80px;
+    padding: 20px 20px 0px;
+    box-sizing: border-box;
+}
+.contentDiv {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.develop_insert ,.develop_examine{
+    display: none;
+}
+.develop_insert .develop_add {
+    width: 550px;
+    margin: 10px auto;
+}
+.develop_insert .develop_add .tableTitle,.develop_examine .develop_exm .tableTitle{
+    font-size: 22px;
+    font-weight: bold;
+}
+.develop_insert .develop_add tr,.develop_examine .develop_exm tr{
+    line-height: 50px;
+}
+.develop_insert .develop_add tr td #saveBtn{
+    display: none;
+}
+.develop_examine .develop_exm {
+    width: 540px;
+    margin: 10px auto;
+    border: 1px solid;
+}
+.develop_examine .develop_exm tr td{
+    border: 1px solid;
+}
+.develop_examine .develop_exm tr td:first-of-type,.develop_examine .develop_exm tr td:nth-child(3){
+    width: 100px;
+    text-align: right;
+    font-weight: 600;
+}
+.develop_examine .develop_exm tr td input,.develop_examine .develop_exm tr td textarea{
+    border: none;
+}
+.develop_examine .develop_exm tr td #remark {
+    border: 1px solid;
+}
+body::-webkit-scrollbar{
+    display: none;
+}
