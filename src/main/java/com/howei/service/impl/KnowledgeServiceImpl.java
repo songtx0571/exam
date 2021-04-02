@@ -56,4 +56,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
         return mapper.getChechEmployeeByMap(map);
 
     }
+
+    @Override
+    public int deleteKcrByKid(Integer id) {
+        return mapper.deleteByKid(id);
+    }
 }

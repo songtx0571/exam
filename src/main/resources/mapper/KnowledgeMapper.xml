@@ -72,6 +72,10 @@
         WHERE
             k.id = #{id}
     </delete>
+    <delete id="deleteByKid">
+        delete from knowledge_check_record where knowledge_id=#{id}
+
+    </delete>
 
     <select id="getByEmployeeId" resultMap="baseMap">
     SELECT
@@ -116,6 +120,13 @@
      k.type =#{map.type}
      <if test="map.employeeId!=null">
          and  k.employee_id = #{ map.employeeId}
+     </if>
+     <if test="map.searchWord!=null and map.searchWord!='' ">
+         and (
+            k.title like #{ map.searchWord}
+         or
+            k.keyword like #{ map.searchWord}
+         )
      </if>
 
     order by  k.heat desc

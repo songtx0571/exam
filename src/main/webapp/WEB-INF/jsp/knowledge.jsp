@@ -24,19 +24,6 @@
 <div class="warp">
     <%--头部--%>
     <div class="top">
-        <form class="layui-form" action="" style="float: left;margin-right: 20px;">
-            <input type="hidden" id="typeHidden" value="1">
-            <div class="layui-inline">
-                <div class="layui-input-inline">
-                    <select name="modules" lay-verify="required" lay-filter="type" lay-search="" id="knowledgeType">
-                        <shiro:hasPermission name="添加编辑库">
-                            <option value="0">编辑库</option>
-                        </shiro:hasPermission>
-                        <option value="1" selected>文档库</option>
-                    </select>
-                </div>
-            </div>
-        </form>
         <shiro:hasPermission name="添加编辑库">
             <button class="layui-btn" onclick="addPage()">添加</button>
         </shiro:hasPermission>
@@ -45,23 +32,11 @@
     <div class="contentDiv">
         <table id="demoTable" lay-filter="testTable"></table>
         <script type="text/html" id="tbStatusBar">
-            {{#  if(d.status== 0){ }}
-            <span style="color: #0c7cd1">待审核</span>
-            {{# }else  if(d.status== 1) { }}
-            <span style="color: #0c7cd3">审核中</span>
-            {{#  } else{  }}
-            <span style="color: #0c7cd5">已审核</span>
-            {{#  }   }}
-        </script>
-        <script type="text/html" id="tbTypeBar">
-            {{#  if(d.type== "0"){ }}
-            <span>编辑库</span>
-            {{# }else  { }}
-            <span>文档库</span>
-            {{#  }   }}
+            {{#  layui.each(d.checkedEmployee, function(index, item){ }}
+            <span>{{ item.checkEmployeeName }}</span>
+            {{#  }); }}
         </script>
         <script type="text/html" id="tbBar">
-
             {{#  if(d.type== "0"){ }}
             <shiro:hasPermission name='审核编辑库'>
                 <a class="layui-btn layui-btn-xs" lay-event="check">审核</a>

@@ -26,4 +26,6 @@ public interface KnowledgeMapper {
     List<Knowledge> getByMap(@Param("map") Map<String, Object> map);
 
     Map<String, Object> getChechEmployeeByMap(@Param("map") Map<String, Object> map);
+
+    int deleteByKid(@Param("id") Integer id);
 }

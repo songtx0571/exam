@@ -1,18 +1,7 @@
 var path = "";
 $(function () {
-    showTable($("#typeHidden").val());
-    changeType();
+    showTable('0');
 });
-//类型下拉框
-function changeType() {
-    layui.use(['form'],function() {
-        var form = layui.form;
-        form.on('select(type)', function(data) {
-            $("#typeHidden").val(data.value);
-            showTable($("#typeHidden").val());
-        });
-    });
-}
 //打开添加页面
 function addPage() {
     $(".tableTitle").html("添加");
@@ -55,7 +44,6 @@ function save() {
             cancel();
         }
     });
-
     $.ajax({
         url:"/exam/operation/send",
         dataType: "json",//数据格式
@@ -63,8 +51,6 @@ function save() {
         data: {employeeId:"",verb:"创建",content:"编辑库,标题为 "+$("#title").val()+" ",type:"exam",remark:"",createTime:""},
         success:function(data){}
     });
-
-
 }
 //显示查询到的内容
 function showTable(type) {
@@ -72,62 +58,26 @@ function showTable(type) {
     var height = win - 100;
     layui.use(['table', 'layedit'], function () {
         var table = layui.table;
-        if(type==0){
-            table.render({
-                elem: '#demoTable'
-                , height: height
-                , url: path + '/exam/knowledge/all?type=' + type
-                , page: true //开启分页
-                , limit: 50
-                , limits: [50, 100, 150]
-                , id: 'demoInfo'
-                , cols: [[ //表头
-                    {field: 'id', title: 'id', align: 'center', sort: true, hide: true}
-                    , {field: 'employeeId', title: '员工id'}
-                    , {field: 'employeeName', title: '员工姓名'}
-                    , {field: 'title', title: '标题'}
-                    , {field: 'keyword', title: '关键字'}
-                    , {field: 'content', title: '内容'}
-                    , {field: 'remark', title: '备注'}
-                    , {fixed: '', title: '审核状态', toolbar: '#tbStatusBar', sort: true}//0不通过,1通过
-                    , {fixed: '', title: '类型', toolbar: '#tbTypeBar', sort: true}//0编辑库,1文档库
-                    , {field: 'createTime', title: '创建时间', sort: true}
-                    , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 210}
-                ]]
-                , parseData: function (res) {}
-                , done: function (res, curr, count) {}
-            });
-        }else{
-            table.render({
-                elem: '#demoTable'
-                , height: height
-                , url: path + '/exam/knowledge/all?type=' + type
-                , page: true //开启分页
-                , limit: 50
-                , limits: [50, 100, 150]
-                , id: 'demoInfo'
-                , cols: [[ //表头
-                    {field: 'id', title: 'id', align: 'center', sort: true, hide: true}
-                    , {field: 'employeeId', title: '员工id'}
-                    , {field: 'employeeName', title: '员工姓名'}
-                    , {field: 'title', title: '标题'}
-                    , {field: 'keyword', title: '关键字'}
-                    , {field: 'content', title: '内容'}
-                    , {field: 'remark', title: '备注'}
-                    , {fixed: '', title: '审核状态', toolbar: '#tbStatusBar', sort: true}//0不通过,1通过
-                    , {fixed: '', title: '类型', toolbar: '#tbTypeBar', sort: true}//0编辑库,1文档库
-                    , {field: 'heat', title: '热度', sort: true}
-                    , {field: 'createTime', title: '创建时间', sort: true}
-                    , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 210}
-                ]]
-                , parseData: function (res) {}
-                , done: function (res, curr, count) {}
-            });
-        }
-
-
-
-
+        table.render({
+            elem: '#demoTable'
+            , height: height
+            , url: path + '/exam/knowledge/all?type=0'
+            , page: true //开启分页
+            , limit: 50
+            , limits: [50, 100, 150]
+            , id: 'demoInfo'
+            , cols: [[ //表头
+                {field: 'id', title: 'id', align: 'center', sort: true, hide: true}
+                , {field: 'title', title: '标题'}
+                , {field: 'keyword', title: '关键字',width: 300}
+                , {field: 'remark', title: '备注',width: 300}
+                , {fixed: '', title: '审核人', toolbar: '#tbStatusBar', sort: true}//0不通过,1通过
+                , {field: 'createTime', title: '创建时间', sort: true}
+                , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 210}
+            ]]
+            , parseData: function (res) {}
+            , done: function (res, curr, count) {}
+        });
         table.on('tool(testTable)', function (obj) {
             var data = obj.data;
             $("#saveBtn").css("display","revert");
@@ -162,13 +112,8 @@ function showTable(type) {
                         }
                         $("#checkedUser").html(html);
                     }
-
                 });
-
-
                 $(".tableTitle").html("审核内容  ");
-
-
                 layui.use('layer', function () { //独立版的layer无需执行这一句
                     var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
                     layer.open({
@@ -198,7 +143,6 @@ function showTable(type) {
                     });
                 });
             } else if (obj.event == "look") {
-
                 $(".tableTitle").html("查看");
                 console.log("lookData",data);
                 console.log("lookData",data);
@@ -215,7 +159,6 @@ function showTable(type) {
                         console.log(res);
                     }
                 });
-
                 $("#saveBtn").css("display","none");
                 layui.use('layer', function () { //独立版的layer无需执行这一句
                     var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
@@ -231,14 +174,15 @@ function showTable(type) {
                     });
                 });
             } else if (obj.event == "del") {
-                 $.ajax({
-                     url: path + "/exam/knowledge/delete",
-                     method: "get",
-                     data: {id: data.id},
-                     success: function (data) {
-                         layer.alert("删除成功");
-                     }
-                 });
+                $.ajax({
+                    url: path + "/exam/knowledge/delete",
+                    method: "get",
+                    data: {id: data.id},
+                    success: function (data) {
+                        layer.alert("删除成功");
+                        showTable('0');
+                    }
+                });
             }
         });
     });
@@ -257,18 +201,17 @@ function adopt() {
     });
     $.ajax({
         url:"/exam/operation/send",
-        dataType: "json",//数据格式
         type: "post",//请求方式
         data: {employeeId:"",verb:"审核",content:"编辑库,标题为 "+$("#title").val()+"",type:"exam",remark:"",createTime:""},
-        success:function(data){}
+        success:function(data){
+            showTable('0');
+        }
     });
-
-    showTable($("#typeHidden").val());
 }
 //审核驳回
 function reject() {
     layer.closeAll();
-    showTable($("#typeHidden").val());
+    showTable('0');
 }
 //取消
 function cancel() {
@@ -278,5 +221,5 @@ function cancel() {
     $("#content").val("");
     $(".remark").val("");
     layer.closeAll();
-    showTable($("#typeHidden").val());
+    showTable('0');
 }

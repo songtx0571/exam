@@ -146,11 +146,6 @@ public class QuestionBankController {
 			String enddate = questiontips.get(i).getEnddate();
 			String startdate = questiontips.get(i).getStartdate();
 
-			System.out.println("getStartdate::"+startdate);
-			System.out.println("enddate::"+enddate);
-			System.out.println("date::"+date);
-
-
 			boolean beforeEnd = date.before(sim.parse(questiontips.get(i).getEnddate()));
 			boolean equalsEnd = date.equals(sim.parse(questiontips.get(i).getEnddate()));
 			boolean afterStart = date.after(sim.parse(questiontips.get(i).getStartdate()));

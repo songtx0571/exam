@@ -20,6 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/exam/knowledge")
+@CrossOrigin(origins="*",allowCredentials = "true")
 public class KnowledgeController {
 
 
@@ -31,21 +32,30 @@ public class KnowledgeController {
         return "knowledge";
     }
 
+    @GetMapping("/toDocument")
+    public String documentPage() {
+        return "documentLibrary";
+    }
+
     @GetMapping("/all")
     @ResponseBody
     public Result getAllKnowledge(
-            @RequestParam int type
+            @RequestParam(required = false) int type,
+            @RequestParam(required = false) String searchWord
     ) {
         Users users = (Users) SecurityUtils.getSubject().getPrincipal();
         if (users == null) {
-            return Result.fail();
+            return Result.fail("用户失效");
         }
         int employeeId = users.getEmployeeId();
         Map<String, Object> map = new HashMap<>();
         // map.put("employeeId", employeeId);
         map.put("type", type);
-
+        if (searchWord != null && !"".equals(searchWord.trim())) {
+            map.put("searchWord", "%"+searchWord+"%");
+        }
         List<Knowledge> knowledgeList = knowledgeService.getByMap(map);
+
         return Result.success(knowledgeList, knowledgeList.size());
     }
 
@@ -57,9 +67,14 @@ public class KnowledgeController {
             return Result.fail("用户失效");
         }
         Knowledge knowledge = knowledgeService.getById(id);
+        Integer heat = knowledge.getHeat();
+        knowledge.setHeat(heat+1);
+        knowledgeService.updateById(knowledge);
         return Result.success(knowledge, 1);
 
     }
+
+
 
     @GetMapping("/delete")
     @ResponseBody
@@ -70,6 +85,18 @@ public class KnowledgeController {
         } else {
             return Result.fail();
         }
+    }
+
+    @GetMapping("/back")
+    @ResponseBody
+    public Result backKnowledge(@RequestParam Integer id) {
+        Knowledge knowledge = knowledgeService.getById(id);
+        knowledge.setType(0);
+        knowledge.setStatus(0);
+        knowledgeService.updateById(knowledge);
+        knowledgeService.deleteKcrByKid(id);
+        return Result.success();
+
     }
 
     @PostMapping("/save")
@@ -127,11 +154,9 @@ public class KnowledgeController {
 
 
         Knowledge knowledge = knowledgeService.getById(id);
-        System.out.println("check_konwolege"+knowledge);
         List<Map> checkedEmployeeList = knowledge.getCheckedEmployee();
         knowledge.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
         int size = checkedEmployeeList.size();
-        System.out.println("size:::"+size);
         if (size > 0 && size < 5) {
             knowledge.setStatus(1);
         }

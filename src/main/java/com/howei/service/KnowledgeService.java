@@ -21,4 +21,6 @@ public interface KnowledgeService {
     List<Knowledge> getByMap(Map<String, Object> map);
 
     Map<String, Object> getCheckEmployeeByMap(Map<String, Object> map);
+
+    int deleteKcrByKid(Integer id);
 }

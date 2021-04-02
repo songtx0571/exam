@@ -1,0 +1,48 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.warp{
+    width: 100%;
+    height: 100%;
+}
+.top{
+    width: 500px;
+    height: 80px;
+    padding-top: 15px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+.top input{
+    width: 348px;
+    height: 50px;
+    float: left;
+    border: 1px solid #009688;
+}
+.top button{
+    float: left;
+    height: 50px;
+    width: 150px;
+}
+.content{
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.develop_look {
+    width: 100%;
+    display: none;
+}
+.develop_look table {
+    width: 550px;
+    margin: 10px auto;
+}
+.develop_look table caption{
+    font-size: 22px;
+    font-weight: bold;
+}
+.develop_look table tr{
+    line-height: 50px;
+}
+body::-webkit-scrollbar{
+    display: none;
+}
