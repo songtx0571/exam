@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@taglib
-prefix="shiro" uri="http://shiro.apache.org/tags" %>
+        prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
 
 <head>
@@ -21,8 +21,8 @@ prefix="shiro" uri="http://shiro.apache.org/tags" %>
     <meta charset="utf-8" />
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
     <script>
         window.onload = function () {
             excise.PoisionAshow("PoisionAselect");
@@ -35,9 +35,6 @@ prefix="shiro" uri="http://shiro.apache.org/tags" %>
     <link href="../css/logo.css" rel="stylesheet" />
 </head>
 <style>
-    #bottom {
-        width: 1800px;
-    }
 
     th .layui-table-cell {
         text-align: center;
@@ -91,13 +88,13 @@ prefix="shiro" uri="http://shiro.apache.org/tags" %>
         <select id="PoisionB1select" onchange="setColor('PoisionB1select');loodtable()">
             <option>请选择</option>
         </select>
-        <button class="layui-btn layui-btn-normal button" style="margin-left: 1280px"
-                onclick="setblock('exam');setblock('addtitle');setblock('addexambtn')">
-            添加
-        </button>
-        <button class="button" style="margin-left: 20px; width: 100px; vertical-align: middle"
+        <button class="button" style="margin-left: 20px; width: 100px; vertical-align: middle;float: right;"
                 onclick="window.document.getElementById('impExcel').style.display='block'">
             Excel导入
+        </button>
+        <button class="layui-btn layui-btn-normal button" style="float: right;"
+                onclick="setblock('exam');setblock('addtitle');setblock('addexambtn')">
+            添加
         </button>
     </div>
     <div style="margin: auto">
@@ -124,7 +121,7 @@ prefix="shiro" uri="http://shiro.apache.org/tags" %>
         </div>
     </div>
 
-    <div id="exam" class="white_content1" style="width: 100%; height: 100%; left: 0px; top: 0px;position: fixed;">
+    <div id="exam" class="white_content1" style="background: white;width: 100%;height: 100%;">
         <img height="24px" style="right: 20px; top: 10px; position: absolute" src="../img/close.png"
              onclick="setnone('exam');setnone('updatetitle');setnone('addtitle');setnone('addexambtn');setnone('updateexambtn');excise.clearInput()" />
         <div style="font-size: 18px; line-height: 32px; display: none" id="addtitle">

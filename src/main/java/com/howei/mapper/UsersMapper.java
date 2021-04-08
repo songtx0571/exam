@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Mapper
@@ -48,4 +49,6 @@ public interface UsersMapper {
     Users getUserRolesByName(@Param("userNumber") String userNumber);
 
     Users getUserByEmpId(@Param("employeeId") Integer employeeId);
+
+    Map<String, Object> getUserSettingByEmployeeId(@Param("employeeId") Integer employeeId);
 }
