@@ -24,7 +24,7 @@ public class Result<T> {
 
     public static <T> Result <T> fail() {
         Result<T> result = new Result<T>();
-        result.code = 401;
+        result.code = -1;
         result.msg = "失败";
         result.data = null;
         return result;

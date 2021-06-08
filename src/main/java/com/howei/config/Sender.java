@@ -8,6 +8,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +21,10 @@ public class Sender implements RabbitTemplate.ConfirmCallback, RabbitTemplate.Re
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    @Value("${rabbitmq.exchange}")
+    private String EXCHANGE;
+    @Value("${rabbitmq.rkContract}")
+    private String RK_CONTRACT;
 
     @PostConstruct
     public void init() {
@@ -46,6 +51,6 @@ public class Sender implements RabbitTemplate.ConfirmCallback, RabbitTemplate.Re
     public void send(OperationRecord record) {
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
         // 将消息类转为json发送
-        rabbitTemplate.convertAndSend(RabbitConstant.EXCHANGE, RabbitConstant.RK_CONTRACT, JSONObject.toJSON(record).toString(), correlationId);
+        rabbitTemplate.convertAndSend(EXCHANGE, RK_CONTRACT, JSONObject.toJSON(record).toString(), correlationId);
     }
 }

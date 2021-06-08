@@ -44,49 +44,68 @@
     		from examinationRecord a where a.userName=#{param1} ORDER BY a.cycle DESC ,a.week DESC,a.times DESC )b 
     	JOIN users d ON b.userName=d.userName
     </select>
-    
+
     <select id="getExamTimes" resultType="com.howei.pojo.Examination">
         select a.userName,a.cycle,a.week,IFNULL(a.times,0)times,a.questionId from examinationRecord a where a.userName=#{param1} and a.cycle=#{param2} and a.week=#{param3}
     </select>
     <select id="getWeek" resultType="com.howei.pojo.Examination">
-        select a.week from exampublish a where a.state=2
+        select * from exampublish a where a.state=1
     </select>
-    
-   	<insert id="insertExamHis">
+
+    <insert id="insertExamHis">
         insert ignore into examinationRecord (userName,cycle,week,times,questionId) values (#{examination.userName},#{examination.cycle},#{examination.week},#{examination.times},#{examination.questionId})
     </insert>
-    
+
     <insert id="addAchievement">
 		insert ignore AchievementRecord(userName,week,result1,cycle,times)
 		value(#{userName},#{week},#{TestScore},#{cycle},1)
 	</insert>
 
-	<update id="updAchievement">
-		update AchievementRecord set 
-		<if test="times==1">
-			result2 = #{TestScore}, times = #{times}+1
-		</if>
-		<if test="times==2">
-			result3 = #{TestScore}, times = #{times}+1
-		</if>
-		<if test="times==3">
-			result4 = #{TestScore}, times = #{times}+1
-		</if>
-		where id = #{id}
-	</update>
-    
-    
-	<select id="findAchievement" resultType="com.howei.pojo.Achievement">
+    <update id="updAchievement">
+        update AchievementRecord set
+        <if test="times==1">
+            result2 = #{TestScore}, times = #{times}+1
+        </if>
+        <if test="times==2">
+            result3 = #{TestScore}, times = #{times}+1
+        </if>
+        <if test="times==3">
+            result4 = #{TestScore}, times = #{times}+1
+        </if>
+        where id = #{id}
+    </update>
+
+
+    <select id="findAchievement" resultType="com.howei.pojo.Achievement">
 		select id,UPPER(userName) userName,week,result1,result2,result3,result4,cycle,times 
 		from AchievementRecord where UPPER(userName) = UPPER(#{userName}) and week = #{week} and cycle = #{cycle}
 	</select>
-	
-   <update id="updatescore"  parameterType="java.lang.String">
+
+    <update id="updatescore" parameterType="java.lang.String">
        update learningsituation set TestScore=#{param1} Where UPPER(UserName)=UPPER(#{param2})
     </update>
-    
-	<select id="findbyUsr" resultType="com.howei.pojo.Situation" parameterType="java.lang.String">
+
+    <select id="findbyUsr" resultType="com.howei.pojo.Situation" parameterType="java.lang.String">
         select ActualPeriod, ActualCredit,TestScore from learningsituation where UPPER(Username)=UPPER(#{param1})
+    </select>
+    <select id="getById" resultType="com.howei.pojo.Exampublish">
+        select * from exampublish where id=#{id} order by state desc,id desc
+    </select>
+    <select id="getAchievementByMap" resultType="com.howei.pojo.Achievement">
+
+        select * from AchievementRecord
+        <where>
+            <if test="userName!=null">
+                and userName=#{userName}
+            </if>
+            <if test="week!=null">
+                and week=#{week}
+            </if>
+            <if test="cycle!=null">
+                and cycle=#{cycle}
+            </if>
+        </where>
+
     </select>
 
 </mapper>

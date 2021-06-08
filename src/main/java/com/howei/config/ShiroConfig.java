@@ -72,7 +72,7 @@ public class ShiroConfig {
         Map<String,String> map1=new HashMap<>();
         map1.put("/logout","logout");
         //登录
-        bean.setLoginUrl("http://test.hopeop.com/login");
+ //        bean.setLoginUrl("http://test.hopeop.com/login");
         //首页
         //bean.setSuccessUrl("/home");
         bean.setFilterChainDefinitionMap(map1);
@@ -97,7 +97,6 @@ public class ShiroConfig {
         sessionManager.setSessionValidationSchedulerEnabled(true);
         sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionIdCookie(getSessionIdCookie());
-        sessionManager.setSessionIdCookie(new SimpleCookie("sessionUser"));
         return sessionManager;
     }
 
