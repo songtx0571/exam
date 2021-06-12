@@ -88,29 +88,35 @@ public class ExampublishServiceImpl implements ExampublishService {
     }
 
 
+    @Override
     public List<Examination> findExamHis(String userName) {
         return exampublishMapper.findExamHis(userName);
     }
 
 
+    @Override
     public Examination getExamTimes(String userName, String cycle, Integer week, Integer questionId, Integer times) {
         return exampublishMapper.getExamTimes(userName, cycle, week, questionId, times);
     }
 
+    @Override
     public Examination getWeek(Integer week) {
         return exampublishMapper.getWeek(week);
     }
 
+    @Override
     public void insertExamHis(Examination examination) {
         exampublishMapper.insertExamHis(examination);
     }
 
 
+    @Override
     public int updatescore(String testScore, String Username) {
         return exampublishMapper.updatescore(testScore, Username);
     }
 
 
+    @Override
     public int addAchievement(int TestScore, String userName) throws ParseException {
         int num = 0;
         QuestionBank questionbank = questionBankMapper.findAllByState();
@@ -138,6 +144,7 @@ public class ExampublishServiceImpl implements ExampublishService {
     public Achievement getAchievementByMap(Map<String, Object> map) {
         return exampublishMapper.getAchievementByMap(map);
     }
+
 
 
     public List<Situation> findbyUsr(String Username) {

@@ -84,7 +84,7 @@ public class ExamManagementController {
      * @return
      */
     @RequestMapping("/toExamManagement")
-    @RequiresPermissions(value = {"考试配置"}, logical = OR)
+    @RequiresPermissions(value = {"考试管理"}, logical = OR)
     public ModelAndView toExamManagement() {
         ModelAndView toExam = new ModelAndView();
         toExam.setViewName("examManagement");
@@ -98,7 +98,7 @@ public class ExamManagementController {
      */
     @RequestMapping("/findExampublish")
     @RequiresPermissions(value = {"考试"}, logical = OR)
-    private String findExampublish(HttpServletRequest request) {
+    public String findExampublish(HttpServletRequest request) {
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
         Subject subject = SecurityUtils.getSubject();
@@ -138,7 +138,7 @@ public class ExamManagementController {
      * @return
      */
     @RequestMapping("addExampublish")
-    private String addExampublish(Exampublish exampublish) {
+    public String addExampublish(Exampublish exampublish) {
         exampublishService.addExampublish(exampublish);
         return "success";
     }
@@ -150,7 +150,7 @@ public class ExamManagementController {
      * @return
      */
     @RequestMapping("updExampublish")
-    private String updExampublish(Exampublish exampublish) {
+    public String updExampublish(Exampublish exampublish) {
         exampublishService.updateExampublish(exampublish);
         return "success";
     }
@@ -162,7 +162,7 @@ public class ExamManagementController {
      * @return
      */
     @RequestMapping("deleteExampublish")
-    private String deleteExampublish(int id) {
+    public String deleteExampublish(int id) {
         exampublishService.deleteExampublish(id);
         return "success";
     }
@@ -297,7 +297,7 @@ public class ExamManagementController {
             @RequestParam(required = false) String examId,
             @RequestParam(required = false) String week
 
-    ) {
+    ) throws ParseException {
         Users users = this.getPrincipal1();
         if (users == null) {
             return Result.fail("用户失效");
@@ -306,13 +306,17 @@ public class ExamManagementController {
         if (exampublish.getState() != 1) {
             return Result.fail("考试未进行");
         }
-        Map<String,Object> map=new HashMap<>();
-        map.put("userName",users.getUserNumber());
-        map.put("week",week);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
+        Map<String, Object> map = new HashMap<>();
+        map.put("userName", users.getUserNumber());
+        map.put("week", week);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String formaCycle = sdf.format(new Date());
-        map.put("cycle",formaCycle);
-        Achievement achievement=exampublishService.getAchievementByMap(map);
+        map.put("cycle", formaCycle);
+        Achievement achievement = exampublishService.getAchievementByMap(map);
+        if (achievement == null) {
+            exampublishService.addAchievement(-1, users.getUserNumber());
+            achievement=exampublishService.getAchievementByMap(map);
+        }
         return Result.success(achievement.getTimes(), null);
     }
 
