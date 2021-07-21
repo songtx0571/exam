@@ -23,6 +23,11 @@
                 <a class="layui-btn " style="line-height: 30px;" lay-event="bank">退回</a>
             </shiro:hasPermission>
         </script>
+        <script type="text/html" id="tbStatusBar1">
+            {{#  layui.each(d.checkedEmployee, function(index, item){ }}
+            <span>{{ item.checkEmployeeName }}</span>
+            {{#  }); }}
+        </script>
     </div>
     <%--查看页面--%>
     <div class="develop_look">
@@ -49,7 +54,7 @@
                            style="width: 480px;margin-left: 6px;">
                 </td>
             </tr>
-            <tr>
+            <tr style="line-height: 25px;">
                 <td>
                     <span style="float: left;line-height: 80px;">内容：</span>
                 </td>

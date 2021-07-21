@@ -74,7 +74,7 @@
                            style="width: 480px;margin-left: 6px;">
                 </td>
             </tr>
-            <tr>
+            <tr style="line-height: 25px;">
                 <td>
                     <span style="float: left;line-height: 80px;">内容：</span>
                 </td>
@@ -117,7 +117,7 @@
                 <td>审核关键字：</td>
                 <td><input type="text" id="checkKeyword" class="layui-input keyword" readonly></td>
             </tr>
-            <tr>
+            <tr style="line-height: 25px;">
                 <td>审核内容：</td>
                 <td style="padding: 8px 0px;box-sizing: border-box;max-width: 480px;" colspan="3">
                     <div id="checkContent" class="content"

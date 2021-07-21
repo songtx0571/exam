@@ -69,9 +69,10 @@ function showTable(type) {
             , cols: [[ //表头
                 {field: 'id', title: 'id', align: 'center', sort: true, hide: true}
                 , {field: 'title', title: '标题'}
+                , {field: 'employeeName', title: '创建人'}
                 , {field: 'keyword', title: '关键字',width: 300}
                 , {field: 'remark', title: '备注',width: 300}
-                , {fixed: '', title: '审核人', toolbar: '#tbStatusBar', sort: true}//0不通过,1通过
+                , {field: 'id', title: '审核人', toolbar: '#tbStatusBar'}//0不通过,1通过
                 , {field: 'createTime', title: '创建时间', sort: true}
                 , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 210}
             ]]

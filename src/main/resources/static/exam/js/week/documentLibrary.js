@@ -23,6 +23,7 @@ function showTable (keyword) {
                 elem: '#demoTable'
                 , height: height
                 , url: path + '/exam/knowledge/all?type=1&searchWord='+keyword
+                , toolbar: true
                 , page: true //开启分页
                 , limit: 50
                 , limits: [50, 100, 150]
@@ -31,8 +32,11 @@ function showTable (keyword) {
                     {field: 'id', title: 'id', align: 'center', sort: true, hide: true}
                     , {field: 'title', title: '标题'}
                     , {field: 'keyword', title: '关键字'}
-                    , {field: 'heat', title: '热度', sort: true,width: 100}
-                    , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 150}
+                    , {field: 'employeeName', title: '创建人', hide: true}
+                    , {field: 'id', title: '审核人', toolbar: '#tbStatusBar1', hide: true}
+                    , {field: 'passTime', title: '审核通过时间', sort: true, hide: true}
+                    , {field: 'heat', title: '热度', sort: true, width: 100}
+                    , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 170}
                 ]]
                 , parseData: function (res) {}
                 , done: function (res, curr, count) {}
