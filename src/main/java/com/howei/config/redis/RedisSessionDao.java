@@ -1,8 +1,9 @@
-package com.howei.config;
+package com.howei.config.redis;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,13 @@ import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class RedisSessionDao extends AbstractSessionDAO {
+public class RedisSessionDao extends RedisSessionDAO {
 
     // Session超时时间，单位为毫秒
-    private long expireTime = 900000;
+    private long expireTime = 28800000;//4小时
 
     @Autowired
-    private RedisTemplate redisTemplate;// Redis操作类，对这个使用不熟悉的
+    private RedisTemplate redisTemplate;
 
     public RedisSessionDao() {
         super();
@@ -29,6 +30,8 @@ public class RedisSessionDao extends AbstractSessionDAO {
         this.expireTime = expireTime;
         this.redisTemplate = redisTemplate;
     }
+
+
 
     @Override // 更新session
     public void update(Session session) throws UnknownSessionException {
@@ -70,6 +73,11 @@ public class RedisSessionDao extends AbstractSessionDAO {
         return (Session) redisTemplate.opsForValue().get(sessionId);
     }
 
+    @Override
+    public void setRedisManager(RedisManager redisManager) {
+        super.setRedisManager(redisManager);
+    }
+
     public long getExpireTime() {
         return expireTime;
     }
@@ -84,6 +92,5 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     public void setRedisTemplate(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
-
     }
 }
