@@ -33,7 +33,15 @@ function showTable (keyword) {
                     , {field: 'title', title: '标题'}
                     , {field: 'keyword', title: '关键字'}
                     , {field: 'employeeName', title: '创建人', hide: true}
-                    , {field: 'id', title: '审核人', toolbar: '#tbStatusBar1', hide: true}
+                    , {field: 'checkedEmployee', title: '审核人', hide: true,
+                        templet: function (a) {
+                            var nameArr = a.checkedEmployee
+                            var name = "";
+                            for (var item in nameArr) {
+                                name += nameArr[item].checkEmployeeName+" "
+                            }
+                            return name.trim();
+                        }}
                     , {field: 'passTime', title: '审核通过时间', sort: true, hide: true}
                     , {field: 'heat', title: '热度', sort: true, width: 100}
                     , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 175}
