@@ -62,7 +62,7 @@
                 <td>
                     <span>标题：</span></td>
                 <td>
-                    <input type="text" id="title" class="layui-input title" style="width: 480px;margin-left: 6px;">
+                    <input type="text" id="title" class="layui-input title" style="width: calc(100% - 70px);margin-left: 6px;">
                 </td>
             </tr>
             <tr>
@@ -71,12 +71,12 @@
                 </td>
                 <td>
                     <input type="text" id="keyword" name="keyword" class="layui-input keyword"
-                           style="width: 480px;margin-left: 6px;">
+                           style="width: calc(100% - 70px);margin-left: 6px;">
                 </td>
             </tr>
             <tr style="line-height: 25px;">
                 <td>
-                    <span style="float: left;line-height: 80px;">内容：</span>
+                    <span style="line-height: 80px;">内容：</span>
                 </td>
                 <td style="max-width: 480px;">
                     <div id="odiv" style="display:none;position:absolute;z-index:100;">
@@ -91,11 +91,11 @@
             </tr>
             <tr>
                 <td>
-                    <span style="float: left;line-height: 80px;">备注：</span>
+                    <span style="line-height: 80px;">备注：</span>
                 </td>
                 <td>
                     <textarea rows="3" class="layui-textarea remark" cols="50" id="remark" name="remark"
-                              style="width: 480px;margin-left: 6px;"></textarea>
+                              style="width: calc(100% - 70px);margin-left: 6px;"></textarea>
                 </td>
             </tr>
             <tr>

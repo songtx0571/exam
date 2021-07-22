@@ -36,7 +36,7 @@ function showTable (keyword) {
                     , {field: 'id', title: '审核人', toolbar: '#tbStatusBar1', hide: true}
                     , {field: 'passTime', title: '审核通过时间', sort: true, hide: true}
                     , {field: 'heat', title: '热度', sort: true, width: 100}
-                    , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 170}
+                    , {fixed: '', title: '操作', toolbar: '#tbBar', align: 'center', width: 175}
                 ]]
                 , parseData: function (res) {}
                 , done: function (res, curr, count) {}

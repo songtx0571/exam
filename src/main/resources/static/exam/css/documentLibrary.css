@@ -33,7 +33,7 @@
     display: none;
 }
 .develop_look table {
-    width: 550px;
+    width: 98%;
     margin: 10px auto;
 }
 .develop_look table caption{
@@ -42,6 +42,9 @@
 }
 .develop_look table tr{
     line-height: 50px;
+}
+.develop_look table tr td:first-child{
+    text-align: right;
 }
 body::-webkit-scrollbar{
     display: none;
