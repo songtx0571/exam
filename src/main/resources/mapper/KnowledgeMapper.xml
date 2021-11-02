@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.howei.mapper.KnowledgeMapper">
 
-    <resultMap id="baseMap" type="com.howei.pojo.Knowledge">
+    <resultMap id="KnowledgeMap" type="com.howei.pojo.Knowledge">
         <id property="id" column="id"></id>
         <result column="employee_id" property="employeeId"></result>
         <result column="employee_name" property="employeeName"></result>
@@ -15,23 +15,41 @@
         <result column="type" property="type"></result>
         <result column="heat" property="heat"></result>
         <result column="create_time" property="createTime"></result>
-        <result column="updata_time" property="updataTime"></result>
-        <collection property="checkedEmployee" resultMap="employeeMap"></collection>
+        <result column="update_time" property="updateTime"></result>
+        <result column="pass" property="updateTime"></result>
+        <collection property="knowledgeCheckRecordList" resultMap="KnowledgeCheckRecordMap"></collection>
     </resultMap>
-    <resultMap id="employeeMap" type="map">
-        <result column="kcr_id" property="kcrId"></result>
-        <result column="check_employee_id" property="checkEmployeeId"></result>
-        <result column="check_employee_name" property="checkEmployeeName"></result>
+    <resultMap id="KnowledgeCheckRecordMap" type="com.howei.pojo.KnowledgeCheckRecord">
+        <result column="kcr_id" property="id"></result>
+        <result column="check_employee_id" property="employeeId"></result>
+        <result column="check_employee_name" property="employeeName"></result>
+        <result column="create_time" property="createTime"></result>
     </resultMap>
-    <insert id="insert">
-        insert into knowledge(employee_id,employee_name,title,keyword,content,remark,create_time,update_time)
-        values (#{record.employeeId},#{record.employeeName},#{record.title},#{record.keyword},#{record.content},#{record.remark},#{record.createTime},#{record.createTime})
+    <resultMap id="KnowledgeKeywordMap" type="com.howei.pojo.KnowledgeKeyword">
+        <result column="id" property="id"></result>
+        <result column="knowledge_id" property="knowledgeId"></result>
+        <result column="keyword" property="keyword"></result>
+        <result column="create_time" property="createTime"></result>
+    </resultMap>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into knowledge(id,employee_id,employee_name,title,keyword,content,remark,create_time)
+        values (null,#{employeeId},#{employeeName},#{title},#{keyword},#{content},#{remark},#{createTime})
     </insert>
     <insert id="insertCheckEmployee">
         insert into
             knowledge_check_record(knowledge_id,employee_id,employee_name,create_time)
         values
             (#{map.knowledgeId},#{map.employeeId},#{map.employeeName},#{map.createTime})
+    </insert>
+    <insert id="insertKk">
+        insert into
+        knowledge_keyword(knowledge_id,keyword,create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.knowledgeId},#{item.keyword},#{item.createTime})
+        </foreach>
+
     </insert>
     <update id="updateById">
         update knowledge
@@ -76,8 +94,11 @@
         delete from knowledge_check_record where knowledge_id=#{id}
 
     </delete>
+    <delete id="deleteKkByKid">
+        delete from knowledge_keyword where knowledge_id=#{id}
+    </delete>
 
-    <select id="getByEmployeeId" resultMap="baseMap">
+    <select id="getByEmployeeId" resultMap="KnowledgeMap">
     SELECT
     DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
         k.*,
@@ -91,7 +112,7 @@
     WHERE
         k.employee_id = #{employeeId}
     </select>
-    <select id="getById" resultMap="baseMap">
+    <select id="getById" resultMap="KnowledgeMap">
     SELECT
     DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
         k.*,
@@ -105,31 +126,31 @@
     WHERE
         k.id = #{id}
     </select>
-    <select id="getByMap" resultMap="baseMap">
-         SELECT
+    <select id="getByMap" resultMap="KnowledgeMap">
+        SELECT
         DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
         k.*,
-         kcr.id kcr_id,
+        kcr.id kcr_id,
         kcr.employee_id check_employee_id,
         kcr.employee_name check_employee_name
-    FROM
+        FROM
         knowledge k
-    JOIN employee e ON k.employee_id = e.id
-    LEFT JOIN knowledge_check_record kcr ON kcr.knowledge_id = k.id
-    WHERE
-     k.type =#{map.type}
-     <if test="map.employeeId!=null">
-         and  k.employee_id = #{ map.employeeId}
-     </if>
-     <if test="map.searchWord!=null and map.searchWord!='' ">
-         and (
+        JOIN employee e ON k.employee_id = e.id
+        LEFT JOIN knowledge_check_record kcr ON kcr.knowledge_id = k.id
+        WHERE
+        k.type =#{map.type}
+        <if test="map.employeeId!=null">
+            and k.employee_id = #{ map.employeeId}
+        </if>
+        <if test="map.searchWord!=null and map.searchWord!='' ">
+            and (
             k.title like #{ map.searchWord}
-         or
+            or
             k.keyword like #{ map.searchWord}
-         )
-     </if>
+            )
+        </if>
 
-    order by  k.heat desc
+        order by k.heat desc
     </select>
     <select id="getChechEmployeeByMap" resultType="java.util.Map">
         select  *

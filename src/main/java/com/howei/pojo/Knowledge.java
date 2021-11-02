@@ -1,5 +1,8 @@
 package com.howei.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,22 +17,19 @@ public class Knowledge {
     private String employeeName;
 
 
-
     private String title;
     private String keyword;
     private String content;
     private String remark;
-    private  Integer status; //审核状态,0不通过,1通过
+    private Integer status; //审核状态,0不通过,1通过
     private Integer type; //类型,0编辑库,1文档库
     private Integer heat;//热度
-    private String createTime;
-    private String updateTime;
-
-
-
-
-    private List<Map> checkedEmployee;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime passTime;
+    private List<KnowledgeCheckRecord> knowledgeCheckRecordList;
 
 
     @Override
@@ -46,18 +46,11 @@ public class Knowledge {
                 ", type=" + type +
                 ", heat=" + heat +
                 ", createTime=" + createTime +
-                ", checkedEmployee=" + checkedEmployee +
+                ", knowledgeCheckRecordList=" + knowledgeCheckRecordList +
                 ", updateTime=" + updateTime +
                 '}';
     }
 
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
 
     public String getEmployeeName() {
         return employeeName;
@@ -67,20 +60,12 @@ public class Knowledge {
         this.employeeName = employeeName;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public List<KnowledgeCheckRecord> getKnowledgeCheckRecordList() {
+        return knowledgeCheckRecordList;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public List<Map> getCheckedEmployee() {
-        return checkedEmployee;
-    }
-
-    public void setCheckedEmployee(List<Map> checkedEmployee) {
-        this.checkedEmployee = checkedEmployee;
+    public void setKnowledgeCheckRecordList(List<KnowledgeCheckRecord> knowledgeCheckRecordList) {
+        this.knowledgeCheckRecordList = knowledgeCheckRecordList;
     }
 
     public Integer getId() {
@@ -153,5 +138,29 @@ public class Knowledge {
 
     public void setHeat(Integer heat) {
         this.heat = heat;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public LocalDateTime getPassTime() {
+        return passTime;
+    }
+
+    public void setPassTime(LocalDateTime passTime) {
+        this.passTime = passTime;
     }
 }

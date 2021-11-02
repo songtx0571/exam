@@ -1,6 +1,7 @@
 package com.howei.service;
 
 import com.howei.pojo.Knowledge;
+import com.howei.pojo.KnowledgeKeyword;
 
 import java.util.List;
 import java.util.Map;
@@ -23,4 +24,9 @@ public interface KnowledgeService {
     Map<String, Object> getCheckEmployeeByMap(Map<String, Object> map);
 
     int deleteKcrByKid(Integer id);
+
+
+    int deleteKkByKid(Integer knowledgeId);
+
+    int insertKk(List<KnowledgeKeyword> knowledgeKeywordList);
 }

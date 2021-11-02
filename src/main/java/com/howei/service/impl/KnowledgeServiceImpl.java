@@ -2,6 +2,7 @@ package com.howei.service.impl;
 
 import com.howei.mapper.KnowledgeMapper;
 import com.howei.pojo.Knowledge;
+import com.howei.pojo.KnowledgeKeyword;
 import com.howei.service.KnowledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,4 +62,15 @@ public class KnowledgeServiceImpl implements KnowledgeService {
     public int deleteKcrByKid(Integer id) {
         return mapper.deleteByKid(id);
     }
+
+    @Override
+    public int deleteKkByKid(Integer knowledgeId) {
+        return mapper.deleteKkByKid(knowledgeId);
+    }
+
+    @Override
+    public int insertKk(List<KnowledgeKeyword> knowledgeKeywordList) {
+        return mapper.insertKk(knowledgeKeywordList);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.howei.mapper;
 
 import com.howei.pojo.Knowledge;
+import com.howei.pojo.KnowledgeKeyword;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+
 @Component
 @Mapper
 public interface KnowledgeMapper {
@@ -15,7 +17,7 @@ public interface KnowledgeMapper {
 
     Integer deleteById(@Param("id") Integer id);
 
-    int insert(@Param("record") Knowledge record);
+    int insert(Knowledge record);
 
     int updateById(@Param("record") Knowledge record);
 
@@ -28,4 +30,8 @@ public interface KnowledgeMapper {
     Map<String, Object> getChechEmployeeByMap(@Param("map") Map<String, Object> map);
 
     int deleteByKid(@Param("id") Integer id);
+
+    int deleteKkByKid(Integer knowledgeId);
+
+    int insertKk(List<KnowledgeKeyword> knowledgeKeywordList);
 }

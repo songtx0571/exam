@@ -70,7 +70,7 @@
                     <span>关键字：</span>
                 </td>
                 <td>
-                    <input type="text" id="keyword" name="keyword" class="layui-input keyword"
+                    <input type="text" id="keyword" name="keyword" class="layui-input keyword" placeholder="关键词之间空格' '分隔"
                            style="width: calc(100% - 70px);margin-left: 6px;">
                 </td>
             </tr>
