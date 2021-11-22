@@ -186,9 +186,9 @@ var exam = (function (jQuery) {
                     ]]
                 });
                 table.on('tool(demo)', function (obj) {
-                     var data = obj.data;
+                    var data = obj.data;
                     if (obj.event === 'startexam') {
-                       // time();
+                        // time();
                         Showtimes(data.id,data.week);
                     }
                 });

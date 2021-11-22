@@ -32,8 +32,8 @@
     <div class="contentDiv">
         <table id="demoTable" lay-filter="testTable"></table>
         <script type="text/html" id="tbStatusBar">
-            {{#  layui.each(d.checkedEmployee, function(index, item){ }}
-            <span>{{ item.checkEmployeeName }}</span>
+            {{#  layui.each(d.knowledgeCheckRecordList, function(index, item){ }}
+            <span>{{ item.employeeName }}</span>
             {{#  }); }}
         </script>
         <script type="text/html" id="tbBar">
