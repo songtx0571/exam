@@ -23,7 +23,7 @@
         <result column="kcr_id" property="id"></result>
         <result column="check_employee_id" property="employeeId"></result>
         <result column="check_employee_name" property="employeeName"></result>
-        <result column="create_time" property="createTime"></result>
+        <result column="check_create_time" property="createTime"></result>
     </resultMap>
     <resultMap id="KnowledgeKeywordMap" type="com.howei.pojo.KnowledgeKeyword">
         <result column="id" property="id"></result>
@@ -102,9 +102,10 @@
     SELECT
     DATE_FORMAT(k.create_time,"%Y-%m-%d %H:%i:%s") create_time,
         k.*,
-         kcr.id kcr_id,
+        kcr.id kcr_id,
         kcr.employee_id check_employee_id,
-        kcr.employee_name check_employee_name
+        kcr.employee_name check_employee_name,
+        kcr.create_time check_create_time
     FROM
         knowledge k
     JOIN employee e ON k.employee_id = e.id

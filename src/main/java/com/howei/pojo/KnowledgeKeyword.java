@@ -3,6 +3,16 @@ package com.howei.pojo;
 import java.time.LocalDateTime;
 
 public class KnowledgeKeyword {
+    public KnowledgeKeyword() {
+        super();
+    }
+
+    public KnowledgeKeyword(Integer knowledgeId, String keyword, LocalDateTime createTime) {
+        this.knowledgeId = knowledgeId;
+        this.keyword = keyword;
+        this.createTime = createTime;
+    }
+
     private Integer id;
     private Integer knowledgeId;
     private String keyword;
