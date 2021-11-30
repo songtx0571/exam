@@ -33,12 +33,12 @@ function showTable (keyword) {
                     , {field: 'title', title: '标题'}
                     , {field: 'keyword', title: '关键字'}
                     , {field: 'employeeName', title: '创建人', hide: true}
-                    , {field: 'checkedEmployee', title: '审核人', hide: true,
+                    , {field: 'knowledgeCheckRecordList', title: '审核人', hide: true,
                         templet: function (a) {
-                            var nameArr = a.checkedEmployee
+                            var nameArr = a.knowledgeCheckRecordList
                             var name = "";
                             for (var item in nameArr) {
-                                name += nameArr[item].checkEmployeeName+" "
+                                name += nameArr[item].employeeName+" "
                             }
                             return name.trim();
                         }}
