@@ -180,6 +180,7 @@ public class KnowledgeController {
         if (users == null) {
             return Result.fail("用户失效");
         }
+        LocalDateTime dateTime = LocalDateTime.now();
         Map<String, Object> map = new HashMap<>();
         map.put("knowledgeId", id);
         int employeeId = users.getEmployeeId();
@@ -191,11 +192,11 @@ public class KnowledgeController {
 
         String userName = users.getUserName();
         map.put("employeeName", userName);
-        map.put("createTime", LocalDateTime.now());
+        map.put("createTime", dateTime);
         knowledgeService.insertCheckEmployee(map);
         Knowledge knowledge = knowledgeService.getById(id);
         List<KnowledgeCheckRecord> knowledgeCheckRecordList = knowledge.getKnowledgeCheckRecordList();
-        knowledge.setUpdateTime(LocalDateTime.now());
+        knowledge.setUpdateTime(dateTime);
         int size = knowledgeCheckRecordList.size();
         if (size > 0 && size < 5) {
             knowledge.setStatus(1);
@@ -204,6 +205,7 @@ public class KnowledgeController {
             knowledge.setStatus(2);
             knowledge.setType(1);
             knowledge.setHeat(0);
+            knowledge.setPassTime(dateTime);
         }
         knowledgeService.updateById(knowledge);
         return Result.success();

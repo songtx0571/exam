@@ -16,7 +16,7 @@
         <result column="heat" property="heat"></result>
         <result column="create_time" property="createTime"></result>
         <result column="update_time" property="updateTime"></result>
-        <result column="pass" property="updateTime"></result>
+        <result column="pass_time" property="passTime"></result>
         <collection property="knowledgeCheckRecordList" resultMap="KnowledgeCheckRecordMap"></collection>
     </resultMap>
     <resultMap id="KnowledgeCheckRecordMap" type="com.howei.pojo.KnowledgeCheckRecord">
@@ -75,6 +75,9 @@
         </if>
         <if test="record.heat!=null">
             ,heat=#{record.heat}
+        </if>
+        <if test="record.passTime!=null">
+            ,pass_time=#{record.passTime}
         </if>
         where
         id=#{record.id}
